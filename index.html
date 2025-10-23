@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Estás Invitado! - Cumpleaños de Julieta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg-start: #fff0f6;
+            --color-bg-end: #ffeef6;
+            --color-card-bg: #ffffff;
+            --color-text: #f08fb0;
+            --color-accent-bg: rgba(240, 143, 176, 0.1);
+            --color-accent-border: rgba(240, 143, 176, 0.3);
+            --color-crown: #ffd27a;
+            --font-main: 'Poppins', sans-serif;
+            --font-name: 'Great Vibes', cursive;
+        }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(170deg, var(--color-bg-start), var(--color-bg-end));
+            color: var(--color-text);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow: hidden;
+        }
+        .invitation-card {
+            position: relative;
+            background: var(--color-card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            max-width: 450px;
+            width: 100%;
+            max-height: 95vh;
+            padding: 3.5rem 1.5rem 1.5rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 700ms ease-out, transform 700ms ease-out;
+        }
+        .invitation-card.visible {
+             opacity: 1;
+             transform: translateY(0);
+        }
+        .animate-on-sequence {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 500ms ease-out, transform 500ms ease-out;
+        }
+        .animate-on-sequence.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .crown {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            width: 70px;
+            height: auto;
+            transform: translateX(-50%) scale(0.8);
+            opacity: 0;
+            transition: opacity 500ms ease-out, transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .crown.visible {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            animation: crown-bounce 2s infinite ease-in-out 0.5s;
+        }
+        .crown .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--color-crown);
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle-anim 1.5s infinite;
+        }
+        .crown.visible .sparkle1 { animation-delay: 1s; }
+        .crown.visible .sparkle2 { animation-delay: 1.5s; }
+        .crown.visible .sparkle3 { animation-delay: 2s; }
+        @keyframes crown-bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0) rotate(0) scale(1); }
+            40% { transform: translateX(-50%) translateY(-10px) rotate(2deg) scale(1); }
+            60% { transform: translateX(-50%) translateY(-5px) rotate(-2deg) scale(1); }
+        }
+        @keyframes sparkle-anim {
+            0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+        }
+        .main-title {
+            font-family: var(--font-name);
+            font-size: clamp(2rem, 10vw, 2.8rem);
+            font-weight: normal;
+            margin-bottom: 0.1rem;
+            color: #E91E8C;
+        }
+        header h2 {
+            font-size: clamp(0.9rem, 4vw, 1rem);
+            font-weight: 400;
+            margin-bottom: 0.25rem;
+        }
+        .name {
+            font-family: var(--font-name);
+            font-size: clamp(2.8rem, 12vw, 3.5rem);
+            font-weight: normal;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            text-shadow: 2px 2px 8px rgba(240, 143, 176, 0.1);
+            margin: 0.25rem 0 1rem; /* Margen inferior aumentado */
+            color: #E91E8C;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: opacity 900ms ease, transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .name.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+        .detail-box {
+            background: var(--color-accent-bg);
+            border: 1px solid var(--color-accent-border);
+            border-radius: 16px;
+            padding: 1rem;
+            transition: transform 300ms ease, box-shadow 300ms ease, opacity 600ms ease-out, transform 600ms ease-out;
+        }
+        .detail-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(240, 143, 176, 0.15);
+        }
+        .details-grid a.detail-box {
+            text-decoration: none;
+            color: var(--color-text);
+        }
+        .detail-box .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .detail-box h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .detail-box p, .detail-box address {
+            font-size: 0.8rem;
+        }
+        .gallery-box {
+            height: 240px; /* Altura Aumentada */
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        .gallery-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 500ms ease-in-out;
+            opacity: 0;
+        }
+        footer p {
+            font-size: clamp(0.9rem, 3vw, 1rem);
+            font-weight: 400;
+            margin-top: 1.5rem; /* Margen reducido */
+        }
+        .floating-emoji {
+            position: fixed;
+            bottom: -100px;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: float-up linear infinite;
+            z-index: -1;
+        }
+        @keyframes float-up {
+            to {
+                transform: translateY(-120vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="invitation-card" data-sequence-item="0">
+        <div class="crown animate-on-sequence" data-sequence-item="3">
+            <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 60L0 20L20 35L50 10L80 35L100 20L90 60H10Z" fill="var(--color-crown)"/>
+                <circle cx="5" cy="18" r="5" fill="var(--color-crown)"/>
+                <circle cx="95" cy="18" r="5" fill="var(--color-crown)"/>
+                <circle cx="50" cy="8" r="8" fill="var(--color-crown)"/>
+            </svg>
+            <div class="sparkle sparkle1"></div>
+            <div class="sparkle sparkle2"></div>
+            <div class="sparkle sparkle3"></div>
+        </div>
+
+        <header>
+            <p class="main-title animate-on-sequence" data-sequence-item="1">¡Estás Invitado!</p>
+            <h2 class="animate-on-sequence" data-sequence-item="2">A celebrar el primer año de nuestra princesa</h2>
+            <h1 class="name animate-on-sequence" data-sequence-item="3">Julieta Tapia</h1>
+        </header>
+
+        <main>
+            <section class="gallery-box animate-on-sequence" data-sequence-item="4">
+                <img src="https://res.cloudinary.com/doo9aucya/image/upload/v1761231383/Imagen_de_WhatsApp_2025-10-22_a_las_17.41.59_d863a0a9_kyoo0j.jpg" id="slideshow-image" alt="Fotos de Julieta">
+            </section>
+
+            <section class="details-grid">
+                <div class="detail-box animate-on-sequence" data-sequence-item="5">
+                    <div class="icon">📅</div>
+                    <h3>Fecha</h3>
+                    <p><time datetime="2025-11-01">01 de Noviembre</time></p>
+                </div>
+                <div class="detail-box animate-on-sequence" data-sequence-item="6">
+                    <div class="icon">🕒</div>
+                    <h3>Hora</h3>
+                    <p><time datetime="14:00">14:00 hrs</time></p>
+                </div>
+                <a href="https://maps.app.goo.gl/BsxzDvKtBGBt3Vvj6" target="_blank" rel="noopener noreferrer" class="detail-box animate-on-sequence" data-sequence-item="7">
+                    <div class="icon">📍</div>
+                    <h3>Lugar</h3>
+                    <address>Rep. Árabe de Egipto 670, Las Condes</address>
+                </a>
+            </section>
+        </main>
+
+        <footer>
+            <p class="animate-on-sequence" data-sequence-item="8">¡Tu presencia hará este día aún más especial!</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function setupSlideshow() {
+                const slideshowImage = document.getElementById('slideshow-image');
+                if (!slideshowImage) return;
+                
+                slideshowImage.style.opacity = 1;
+
+                if (prefersReducedMotion) return;
+
+                const images = ['https://res.cloudinary.com/doo9aucya/image/upload/v1761231383/Imagen_de_WhatsApp_2025-10-22_a_las_17.41.59_d863a0a9_kyoo0j.jpg', 'https://res.cloudinary.com/doo9aucya/image/upload/v1761231383/Imagen_de_WhatsApp_2025-10-22_a_las_17.41.49_ef6e3db6_cfiiwv.jpg', 'https://res.cloudinary.com/doo9aucya/image/upload/v1761000544/Imagen_de_WhatsApp_2025-10-20_a_las_19.07.15_82c7fc8d_f9ugxp.jpg'];
+                let currentIndex = 0;
+
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    slideshowImage.style.opacity = 0;
+
+                    setTimeout(() => {
+                        slideshowImage.src = images[currentIndex];
+                        slideshowImage.style.opacity = 1;
+                    }, 500);
+                }, 3000);
+            }
+
+            function createFloatingEmojis() {
+                if (prefersReducedMotion) return;
+                const container = document.body;
+                const emojis = ['⭐️', '❤️', '🎈', '🏰'];
+                for (let i = 0; i < 20; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.classList.add('floating-emoji');
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = `${Math.random() * 100}vw`;
+                    emoji.style.fontSize = `${Math.random() * 2 + 1.5}rem`;
+                    const duration = Math.random() * 10 + 15;
+                    emoji.style.animationDuration = `${duration}s`;
+                    emoji.style.animationDelay = `${Math.random() * 10}s`;
+                    container.appendChild(emoji);
+                }
+            }
+
+            function playSequence() {
+                const items = document.querySelectorAll('[data-sequence-item]');
+                
+                if (prefersReducedMotion) {
+                    items.forEach(item => item.classList.add('visible'));
+                    setupSlideshow();
+                    return;
+                }
+
+                const sequenceTimeline = {
+                    0: 200,   // Tarjeta principal
+                    1: 800,   // ¡Estás Invitado!
+                    2: 1500,  // A celebrar...
+                    3: 2200,  // Nombre y Corona
+                    4: 3000,  // Galería (antes era Edad)
+                    5: 3700,  // Fecha (antes era 6)
+                    6: 3950,  // Hora (antes era 7)
+                    7: 4200,  // Lugar (antes era 8)
+                    8: 4900,  // Mensaje final (antes era 9)
+                };
+
+                items.forEach(item => {
+                    const sequenceNum = item.getAttribute('data-sequence-item');
+                    const delay = sequenceTimeline[sequenceNum] || 0;
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                        if (item.classList.contains('gallery-box')) {
+                            setupSlideshow();
+                        }
+                    }, delay);
+                });
+            }
+
+            createFloatingEmojis();
+            playSequence();
+
+            function setupParallax() {
+                const isTouchDevice = 'ontouchstart' in window;
+                if (prefersReducedMotion || isTouchDevice) return;
+                const emojis = document.querySelectorAll('.floating-emoji');
+                const strength = 10;
+                document.addEventListener('mousemove', (e) => {
+                    const { clientX, clientY } = e;
+                    const { innerWidth, innerHeight } = window;
+                    const x = (clientX / innerWidth - 0.5) * 2;
+                    const y = (clientY / innerHeight - 0.5) * 2;
+                    emojis.forEach(emoji => {
+                        const speed = parseFloat(emoji.style.fontSize) / 2;
+                        const offsetX = -x * strength * speed;
+                        const offsetY = -y * strength * speed;
+                        emoji.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                    });
+                });
+                document.body.addEventListener('mouseleave', () => {
+                     emojis.forEach(emoji => {
+                        emoji.style.transform = `translate(0, 0)`;
+                    });
+                });
+            }
+            setTimeout(setupParallax, 100);
+        });
+    </script>
+
+</body>
+</html>
